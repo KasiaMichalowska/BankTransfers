@@ -1,5 +1,4 @@
 ﻿using System;
-using VisioForge.Shared.MediaFoundation.OPM;
 
 namespace BankTransfers
 {
@@ -13,14 +12,15 @@ namespace BankTransfers
 
         private Bank _bank;
         private UserInterface _userInterface;
+
         private void Run()
         {
-            _userInterface = new UserInterface();
             _bank = new Bank();
-       
+            _userInterface = new UserInterface();
+
             do
             {
-                _userInterface.DisplaynMenu();
+                _userInterface.DisplayMenu();
                 var selectedMenuOption = _userInterface.ReadMenu();
 
                 switch (selectedMenuOption)
@@ -31,17 +31,25 @@ namespace BankTransfers
                     case 6:
                         Environment.Exit(0);
                         break;
+                    default:
+                        Console.WriteLine("Unknown menu option");
+                        break;
                 }
-
             } while (true);
-        }        
+        }
 
         private void CreateAccount()
         {
-            _userInterface.DisplayCreateAccountInfo();
+            _userInterface.DisplayCreateAccountInfo();            
             var accountName = _userInterface.GetAccountName();
             var account = _bank.CreateAccount(accountName);
             _userInterface.DisplayAccountInfo(account);
-        }          
+        }
+
+        private void AccountBalance()
+        {
+            _userInterface.DisplayAccountBalance();
+        }
+
     }
 }

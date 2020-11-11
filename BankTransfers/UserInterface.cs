@@ -4,10 +4,10 @@ namespace BankTransfers
 {
     public class UserInterface
     {
-        public void DisplaynMenu()
+        public void DisplayMenu()
         {
-            // zaimplementacje po nazwie jest bardziej uciążliwa w obsłudze (wymaga wpisywania nazwy opcji menu zamiast numerka)
-            Console.WriteLine(" Bank Transfers App - Menu: ");
+            // implementacja po nazwie jest bardziej uciążliwa w obsłudze (wymaga wpisywania nazwy opcji menu zamiast numerka)
+            Console.WriteLine(" Bank Transfer App - Menu: ");
             Console.WriteLine(" 1. Create account");
             Console.WriteLine(" 2. Domestic transfer");
             Console.WriteLine(" 3. Outgoing transfer");
@@ -42,6 +42,16 @@ namespace BankTransfers
         public string GetAccountName()
         {
             return Console.ReadLine();
+        }
+
+        public void DisplayAccountBalance()
+        {
+            Console.WriteLine(" Display account Balance");
+        }
+
+        public void PerformDomesticTransfer()
+        {
+
         }
     }
 }

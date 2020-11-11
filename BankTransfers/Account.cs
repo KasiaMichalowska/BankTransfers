@@ -1,22 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BankTransfers
 {
     public class Account
     {
-        private readonly string _name;
-        private readonly Guid _accountNumber;
-        private decimal _balance;
+        private string _accountName;
+        private Guid _accountNumber;
+        private decimal _accountBalance;
 
         public Account(string name)
         {
-            _name = name;
+            _accountName = name;
             _accountNumber = Guid.NewGuid();
-            _balance = 1000$;
+            _accountBalance = 1000;
+        }
+ 
+        public override string ToString()
+        {
+            return $"   Account: {_accountName}\n" +
+                   $"   Account No: {_accountNumber}\n" +
+                   $"   Balance: ${_accountBalance}";
         }
 
-        // nie dodałam override ToString, bo tego chyba nie omawialiśmy na kursie
+        public static implicit operator Guid(Account v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
