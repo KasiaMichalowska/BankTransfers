@@ -6,6 +6,7 @@ namespace BankTransfers
     {
         public void DisplaynMenu()
         {
+            // zaimplementacje po nazwie jest bardziej uciążliwa w obsłudze (wymaga wpisywania nazwy opcji menu zamiast numerka)
             Console.WriteLine(" Bank Transfers App - Menu: ");
             Console.WriteLine(" 1. Create account");
             Console.WriteLine(" 2. Domestic transfer");
