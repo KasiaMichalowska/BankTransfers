@@ -27,5 +27,21 @@ namespace BankTransfers
             }
             return userChoice;
         }
+
+        public void DisplayCreateAccountInfo()
+        {
+            Console.WriteLine(" Creating new account");
+            Console.WriteLine(" Provide account name: ");
+        }
+
+        public void DisplayAccountInfo(Account account)
+        {
+            Console.WriteLine(account.ToString());
+        }
+
+        public string GetAccountName()
+        {
+            return Console.ReadLine();
+        }
     }
 }
