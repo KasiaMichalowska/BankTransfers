@@ -25,8 +25,43 @@ namespace BankTransfers
         {
             int userChoice;
             WritePrompt(prompt);
+            while (!int.TryParse(Console.ReadLine(), out userChoice))
+            {
+                WriteError("Incorrect option - try again...");
+                WritePrompt(prompt);
+            }
+
+            return userChoice;
         }
 
+        private decimal ReadDecimalValue(string prompt)
+        {
+            decimal userValue;
+            WritePrompt(prompt);
+            while (!decimal.TryParse(Console.ReadLine(), out userValue))
+            {
+                WriteError("Incorrect decimal value - try again...");
+                WritePrompt(prompt);
+            }
+
+            return userValue;
+        }
+
+        private string ReadStringValue(string prompt, bool allowEmpty = true)
+        {
+            WritePrompt(prompt);
+            var userValue = Console.ReadLine();
+            if (!allowEmpty)
+            {
+                while (userValue != null && userValue.Trim().Length == 0)
+                {
+                    WriteError("Provided value cannot be empty");
+                    WritePrompt(prompt);
+                }
+            }
+
+            return userValue;
+        }
         #endregion
 
         #region DisplayMenu
