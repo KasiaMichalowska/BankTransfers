@@ -4,7 +4,7 @@ namespace BankTransfers
 {
     public class Bank
     {
-        private List<BankAccount> _accounts;
+        private readonly List<BankAccount> _accounts;
 
         public Bank()
         {

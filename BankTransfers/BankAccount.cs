@@ -29,7 +29,7 @@ namespace BankTransfers
         {
             return $"   Account: {_accountName}\n" +
                    $"   Account No: {_accountNumber}\n" +
-                   $"   Balance: ${_accountBalance}";
+                   $"   Balance: ${_accountBalance}\n";
         }
     }
 }

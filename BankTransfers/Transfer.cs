@@ -9,6 +9,7 @@ namespace BankTransfers
         public bool _domestic;
         private Guid _sourceAccountNumberGuid;
         private Guid _destinationAccountNumberGuid;
+        private string _destinationAccountNumber;
         public string _transferTitle;
         public decimal _transferAmount;
         public DateTime _transferDate;
@@ -26,7 +27,30 @@ namespace BankTransfers
             destination.AccountBalance += transferAmount;
         }
 
-       // public static DateTime Now { get; }
-      
+        public void PerformOutgoingTransfer(BankAccount source, string destination, decimal transferAmount, string transferTitle,
+     DateTime transferDate)
+        {
+            _domestic = false;
+            _sourceAccountNumberGuid = source.AccountNumber;
+            _destinationAccountNumber = destination;
+            _transferTitle = transferTitle;
+            _transferAmount = transferAmount;
+            _transferDate = transferDate;
+
+            source.AccountBalance -= transferAmount;
+        }
+
+        public override string ToString()
+        {
+            String transferType = _domestic ? "Domestic transfer" : "Outgoing transfer";
+            String source = _sourceAccountNumberGuid.ToString();
+            String destination = _domestic ? _destinationAccountNumberGuid.ToString() : _destinationAccountNumber;
+            return $"{transferType}\n" +
+                   $"   From:   {source}\n" +
+                   $"   To:     {destination}\n" +
+                   $"   Title:  {_transferTitle}\n" +
+                   $"   Date:   {_transferDate.ToString(CultureInfo.CurrentCulture)}\n" +
+                   $"   AMOUNT: ${_transferAmount}\n";
+        }
     }
 }

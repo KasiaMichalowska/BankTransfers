@@ -62,6 +62,7 @@ namespace BankTransfers
 
             return userValue;
         }
+
         #endregion
 
         #region DisplayMenu
@@ -112,29 +113,44 @@ namespace BankTransfers
         #endregion
 
         #region Transfer
-        public void DisplayDomesticTransferStart(List<BankAccount> account)
+        public void DisplayTransferStart(List<BankAccount> accounts, bool isDomestic)
         {
-            Console.WriteLine("Domestic Transfer");
-            int position = 1;
-            foreach (var bankaccount in account)
+            if (isDomestic)
             {
-                Console.WriteLine($"{position}.{bankaccount.Name}\t{bankaccount.AccountNumber}\tBalance: ${bankaccount.AccountBalance}");
+                Console.WriteLine("Domestic Transfer");
+            }
+            else
+            {
+                Console.WriteLine("Outgoing Transfer");
+            }
+
+            int position = 1;
+            foreach (var bankaccount in accounts)
+            {
+                Console.WriteLine($"{position}. {bankaccount.Name}\t{bankaccount.AccountNumber}\tBalance: ${bankaccount.AccountBalance}");
+                position++;
             }
         }
 
         public int GetSourceAccountIndex()
         {
-            int accountIndex = ReadIntegerValue("Provide source account");
+            int accountIndex = ReadIntegerValue("Provide source bank account");
             accountIndex--;
             return accountIndex;
         }
 
         public int GetDestinationAccountIndex()
         {
-            int accountIndex = ReadIntegerValue("Provide destination account");
+            int accountIndex = ReadIntegerValue("Provide destination bank account");
             accountIndex--;
             return accountIndex;
         }
+
+        public string GetExternalAccountNumber()
+        {
+            return ReadStringValue("Provide destination (external) bank account number");
+        }
+
         public String GetTransferTitle()
         {
             return ReadStringValue("Provide transfer title");
@@ -145,16 +161,10 @@ namespace BankTransfers
             return ReadDecimalValue("Provide transfer amount");
         }
 
-
-        public void DisplayAccountBalance()
+        public void DisplayTransferSummary(Transfer transfer)
         {
-            Console.WriteLine(" Display account Balance");
-        }
-
-        public void DisplayDomesticTransferSummary(Transfer transfer)
-        {
-            WriteLine("Transfer successful");
-            WriteLine(transfer.ToString());
+            Console.WriteLine("Transfer is successful");
+            Console.WriteLine(transfer.ToString());
         }
 
         #endregion
@@ -163,27 +173,52 @@ namespace BankTransfers
 
         public void DisplayLessThan2AccountDomesticError()
         {
-            WriteError("There are less than 2 domestic accounts, cannot perform a domestic transfer.");
+            Console.WriteLine("There are less than 2 domestic bank accounts, cannot perform a domestic transfer.");
         }
 
-        public void DisplayIncorrectDomesticAccountError()
+        public void DisplayIncorrectAccountError()
         {
-            WriteError("Source or destination account is invalid, cannot perform a domestic transfer.");
+            Console.WriteLine("Source or destination account is invalid, cannot perform a domestic transfer.");
         }
 
         public void DisplayTransferToTheSameDomesticAccountError()
         {
-            WriteError("Source and destination account is the same, cannot do a domestic transfer");
+            Console.WriteLine("Source and destination account is the same, cannot do a domestic transfer");
         }
 
         public void Display0OrLessTransferAmountError()
         {
-            WriteError("$0 or less cannot be transferred");
+            Console.WriteLine("$0 or less cannot be transferred");
         }
 
         public void DisplayGreaterThanSourceBalanceError()
         {
-            WriteError("Amount greater than source account balance cannot be transferred");
+            Console.WriteLine("Amount greater than source account balance cannot be transferred");
+        }
+
+        public void DisplayLessThan1OutgoingAccountError()
+        {
+            Console.WriteLine("To do a transfer there has to be at least 1 domestic account");
+        }
+
+        public void DisplayLessThan2AccountsDomesticError()
+        {
+            Console.WriteLine("There are less than 2 domestic accounts, cannot do a transfer");
+        }
+
+        public void DisplayLessThan1AccountsOutgoingError()
+        {
+            Console.WriteLine("To do a transfer there has to be at least 1 domestic account");
+        }
+
+        public void DisplayIncorrectAccountsError()
+        {
+            Console.WriteLine("Source or destination account is invalid, cannot do a transfer");
+        }
+
+        public void DisplayTransferToTheSameAccountDomesticError()
+        {
+            Console.WriteLine("Source and destination account is the same, cannot do a transfer");
         }
 
         #endregion

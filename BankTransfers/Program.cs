@@ -1,6 +1,4 @@
 ﻿using System;
-using VisioForge.Shared.MediaFoundation.dxvahd;
-using VisioForge.Types;
 
 namespace BankTransfers
 {
@@ -14,11 +12,11 @@ namespace BankTransfers
 
         private Bank _bank;
         private UserInterface _userInterface;
-
+                
         private void Run()
         {
-            _bank = new Bank();
             _userInterface = new UserInterface();
+            _bank = new Bank();
 
             do
             {
@@ -62,7 +60,7 @@ namespace BankTransfers
 
             if (source == null || destination == null)
             {
-                _userInterface.DisplayIncorrectDomesticAccountError();
+                _userInterface.DisplayIncorrectAccountError();
                 return;
             }
 
@@ -85,13 +83,47 @@ namespace BankTransfers
             {
                 _userInterface.DisplayGreaterThanSourceBalanceError();
                 return;
+            }            
+        }
+
+        private void OutgoingTransfer()
+        {
+            if (_bank.GetAccount().Count < 1)
+            {
+                _userInterface.DisplayLessThan1OutgoingAccountError();
+                return;
+            }
+
+            _userInterface.DisplayTransferStart(_bank.GetAccount(), false);
+            BankAccount source = _bank.GetBankAccount(_userInterface.GetSourceAccountIndex());
+            String destination = _userInterface.GetExternalAccountNumber();
+
+            if (source == null || destination.Length == 0)
+            {
+                _userInterface.DisplayIncorrectAccountError();
+                return;
+            }
+
+            string transferTitle = _userInterface.GetTransferTitle();
+            decimal amount = _userInterface.GetTransferAmount();
+
+            if (amount <= 0)
+            {
+                _userInterface.Display0OrLessTransferAmountError();
+                return;
+            }
+
+            if (amount > source.AccountBalance)
+            {
+                _userInterface.DisplayGreaterThanSourceBalanceError();
+                return;
             }
 
             Transfer transfer = new Transfer();
-            transfer.PerformDomesticTransfer(
+            transfer.PerformOutgoingTransfer(
                 source,
                 destination,
-                transferAmount,
+                amount,
                 transferTitle,
                 DateTime.Now);
 
