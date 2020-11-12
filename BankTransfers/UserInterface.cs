@@ -5,7 +5,6 @@ namespace BankTransfers
 {
     public class UserInterface
     {
-        #region Formatting
         private void WritePrompt(string prompt)
         {
             Console.Write($"\n---- {prompt}: ");
@@ -63,9 +62,6 @@ namespace BankTransfers
             return userValue;
         }
 
-        #endregion
-
-        #region DisplayMenu
         public void DisplayMenu()
         {
             // implementacja po nazwie jest bardziej uciążliwa w obsłudze (wymaga wpisywania nazwy opcji menu zamiast numerka)
@@ -90,13 +86,9 @@ namespace BankTransfers
             return userChoice;
         }
 
-        #endregion
-
-        #region CreateAccount
-
         public void DisplayCreateAccountInfo()
         {
-            Console.WriteLine(" Creating new account");
+          //  Console.WriteLine(" Creating new account");
             Console.WriteLine(" Provide account name: ");
         }
 
@@ -110,9 +102,6 @@ namespace BankTransfers
             return Console.ReadLine();
         }
 
-        #endregion
-
-        #region Transfer
         public void DisplayTransferStart(List<BankAccount> accounts, bool isDomestic)
         {
             if (isDomestic)
@@ -150,57 +139,7 @@ namespace BankTransfers
         {
             return ReadStringValue("Provide destination (external) bank account number");
         }
-
-        public String GetTransferTitle()
-        {
-            return ReadStringValue("Provide transfer title");
-        }
-
-        public decimal GetTransferAmount()
-        {
-            return ReadDecimalValue("Provide transfer amount");
-        }
-
-        public void DisplayTransferSummary(Transfer transfer)
-        {
-            Console.WriteLine("Transfer is successful");
-            Console.WriteLine(transfer.ToString());
-        }
-
-        #endregion
-
-        #region errorsHandling
-
-        public void DisplayLessThan2AccountDomesticError()
-        {
-            Console.WriteLine("There are less than 2 domestic bank accounts, cannot perform a domestic transfer.");
-        }
-
-        public void DisplayIncorrectAccountError()
-        {
-            Console.WriteLine("Source or destination account is invalid, cannot perform a domestic transfer.");
-        }
-
-        public void DisplayTransferToTheSameDomesticAccountError()
-        {
-            Console.WriteLine("Source and destination account is the same, cannot do a domestic transfer");
-        }
-
-        public void Display0OrLessTransferAmountError()
-        {
-            Console.WriteLine("$0 or less cannot be transferred");
-        }
-
-        public void DisplayGreaterThanSourceBalanceError()
-        {
-            Console.WriteLine("Amount greater than source account balance cannot be transferred");
-        }
-
-        public void DisplayLessThan1OutgoingAccountError()
-        {
-            Console.WriteLine("To do a transfer there has to be at least 1 domestic account");
-        }
-
+                
         public void DisplayLessThan2AccountsDomesticError()
         {
             Console.WriteLine("There are less than 2 domestic accounts, cannot do a transfer");
@@ -211,16 +150,9 @@ namespace BankTransfers
             Console.WriteLine("To do a transfer there has to be at least 1 domestic account");
         }
 
-        public void DisplayIncorrectAccountsError()
-        {
-            Console.WriteLine("Source or destination account is invalid, cannot do a transfer");
-        }
-
         public void DisplayTransferToTheSameAccountDomesticError()
         {
             Console.WriteLine("Source and destination account is the same, cannot do a transfer");
         }
-
-        #endregion
     }
 }

@@ -50,7 +50,7 @@ namespace BankTransfers
                    $"   To:     {destination}\n" +
                    $"   Title:  {_transferTitle}\n" +
                    $"   Date:   {_transferDate.ToString(CultureInfo.CurrentCulture)}\n" +
-                   $"   AMOUNT: ${_transferAmount}\n";
+                   $"   Amount: ${_transferAmount}\n";
         }
     }
 }
