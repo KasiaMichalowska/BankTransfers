@@ -2,20 +2,34 @@
 
 namespace BankTransfers
 {
-    class BankAccount
+    public class BankAccount
     {
-        public string AccountName;
-        private Guid AccountNumber;
-        public decimal AccountBalance;
+        private readonly string _accountName;
+        private readonly Guid _accountNumber;
+        private decimal _accountBalance;
 
-        public BankAccount(string accountName, Guid accountNumber, decimal accountBalance)
-
+        public BankAccount(string name)
         {
-            AccountName = accountName;
-            AccountNumber = accountNumber;
-            AccountBalance = accountBalance;
+            _accountName = name;
+            _accountNumber = Guid.NewGuid();
+            _accountBalance = 1000;
+        }
 
-            // Guid g = Guid.NewGuid();
+        public decimal AccountBalance
+        {
+            get => _accountBalance;
+            set => _accountBalance = value;
+        }
+
+        public string Name => _accountName;
+
+        public Guid AccountNumber => _accountNumber;
+
+        public override string ToString()
+        {
+            return $"   Account: {_accountName}\n" +
+                   $"   Account No: {_accountNumber}\n" +
+                   $"   Balance: ${_accountBalance}";
         }
     }
 }

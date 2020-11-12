@@ -1,4 +1,6 @@
 ﻿using System;
+using VisioForge.Shared.MediaFoundation.dxvahd;
+using VisioForge.Types;
 
 namespace BankTransfers
 {
@@ -40,16 +42,62 @@ namespace BankTransfers
 
         private void CreateAccount()
         {
-            _userInterface.DisplayCreateAccountInfo();            
+            _userInterface.DisplayCreateAccountInfo();
             var accountName = _userInterface.GetAccountName();
             var account = _bank.CreateAccount(accountName);
             _userInterface.DisplayAccountInfo(account);
         }
 
-        private void AccountBalance()
+        private void DomesticTransfer()
         {
-            _userInterface.DisplayAccountBalance();
-        }
+           
 
+            if (_bank.GetAccount().Count <= 1)
+            {
+                _userInterface.DisplayLessThan2AccountDomesticError();
+                return;
+            }
+
+            _userInterface.DisplayDomesticTransferStart(_bank.GetAccount());
+            BankAccount source = _bank.GetAccount(_userInterface.GetSourceAccountIndex());
+            BankAccount destination = _bank.GetAccount(_userInterface.GetDestinationAccountIndex());
+
+            if (source == null || destination == null)
+            {
+                _userInterface.DisplayIncorrectDomesticAccountError();
+                return;
+            }
+
+            if (source == destination)
+            {
+                _userInterface.DisplayTransferToTheSameDomesticAccountError();
+                return;
+            }
+
+            string transferTitle = _userInterface.GetTransferTitle();
+            decimal amount = _userInterface.GetTransferAmount();
+
+            if (amount <= 0)
+            {
+                _userInterface.Display0OrLessTransferAmountError();
+                return;
+            }
+
+            if (amount > source.AccountBalance)
+            {
+                _userInterface.DisplayGreaterThanSourceBalanceError();
+                return;
+            }
+
+            Transfer transfer = new Transfer();
+            transfer.PerformDomesticTransfer(
+                source,
+                destination,
+                amount,
+                transferTitle,
+                DateTime.Now);
+
+            _userInterface.DisplayDomesticTransferSummary(transfer);
+        }
     }
 }
