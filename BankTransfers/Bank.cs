@@ -7,7 +7,6 @@ namespace BankTransfers
         private readonly List<BankAccount> _accounts;
         private readonly List<Transfer> _transfers;
 
-
         public Bank()
         {
             _accounts = new List<BankAccount>();
@@ -41,6 +40,7 @@ namespace BankTransfers
 
             return null;
         }
+
         public List<Transfer> GetTransfers()
         {
             return _transfers;

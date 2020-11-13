@@ -4,15 +4,8 @@ namespace BankTransfers
 {
     class Program
     {
-        public static void Main(string[] args)
-        {
-            var program = new Program();
-            program.Run();
-        }
-
         private Bank _bank;
-        private UserInterface _userInterface;
-
+        private UserInterface _userInterface;       
         private void Run()
         {
             _userInterface = new UserInterface();
@@ -50,18 +43,7 @@ namespace BankTransfers
         private void CreateAccount()
         {
             _userInterface.DisplayCreateAccountInfo();
-            //public void DisplayCreateAccountInfo()
-            //{
-            //    Console.WriteLine(" Creating new account");
-            //    Console.WriteLine(" Provide account name: ");
-            //}
-
             var accountName = _userInterface.GetAccountName();
-            //public string GetAccountName()
-            //{
-            //    return Console.ReadLine();
-            //}
-
             var account = _bank.CreateAccount(accountName);
             Console.WriteLine("Creating new account");
         }
@@ -70,113 +52,84 @@ namespace BankTransfers
         {
             if (_bank.GetAccount().Count <= 1)
             {
-                Console.WriteLine("There are less than 2 domestic bank accounts, cannot perform a domestic transfer.");
+                _userInterface.DisplayLessThan2AccountsDomesticError();
                 return;
             }
 
             _userInterface.DisplayTransferStart(_bank.GetAccount(), true);
-
-            //public void DisplayTransferStart(List<BankAccount> accounts, bool isDomestic)
-            //{
-            //    if (isDomestic)
-            //    {
-            //        Console.WriteLine("Domestic Transfer");
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("Outgoing Transfer");
-            //    }
-
-            //    int position = 1;
-            //    foreach (var bankaccount in accounts)
-            //    {
-            //        Console.WriteLine($"{position}. {bankaccount.Name}\t{bankaccount.AccountNumber}\tBalance: ${bankaccount.AccountBalance}");
-            //        position++;
-            //    }
-            //}
-
             BankAccount source = _bank.GetBankAccount(_userInterface.GetSourceAccountIndex());
-
-            //public int GetSourceAccountIndex()
-            //{
-            //    int accountIndex = ReadIntegerValue("Provide source bank account");
-            //    accountIndex--;
-            //    return accountIndex;
-            //}
-
             BankAccount destination = _bank.GetBankAccount(_userInterface.GetDestinationAccountIndex());
-
-            //public int GetDestinationAccountIndex()
-            //{
-            //    int accountIndex = ReadIntegerValue("Provide destination bank account");
-            //    accountIndex--;
-            //    return accountIndex;
-            //}
 
             if (source == null || destination == null)
             {
-                Console.WriteLine("Source or destination account is invalid, cannot do a transfer");
+                _userInterface.DisplayIncorrectAccountsError();
                 return;
             }
 
             if (source == destination)
             {
-                Console.WriteLine("Source and destination account is the same, cannot do a domestic transfer");
+                _userInterface.DisplayTransferToTheSameAccountDomesticError();
                 return;
             }
 
             string transferTitle = _userInterface.GetTransferTitle();
-            Console.WriteLine("Provide transfer title");
-
             decimal transferAmount = GetTransferAmount();
-            Console.WriteLine("Provide transfer amount");
 
             if (transferAmount <= 0)
             {
-                Console.WriteLine("$0 or less cannot be transferred");
+                _userInterface.Display0OrLessTransferAmountError();
                 return;
             }
 
             if (transferAmount > source.AccountBalance)
             {
-                Console.WriteLine("Amount greater than source account balance cannot be transferred");
+                _userInterface.DisplayGreaterThanSourceBalanceError();
+                return;
             }
-            return;
+
+            Transfer transfer = new Transfer();
+            transfer.PerformDomesticTransfer(
+                source,
+                destination,
+                transferamount,
+                transferTitle,
+                DateTime.Now);
+
+            _bank.RegisterTransfer(transfer);
+            _userInterface.DisplayTransferSummary(transfer);
         }
     }
 
     private void OutgoingTransfer()
     {
-        if (_bank.GetAccount().Count < 1)
+        if (_bank.GetAccounts().Count < 1)
         {
-            Console.WriteLine("To do a transfer there has to be at least 1 domestic account");
+            _userInterface.DisplayLessThan1AccountsOutgoingError();
             return;
         }
 
-        _userInterface.DisplayTransferStart(_bank.GetAccount(), false);
+        _userInterface.DisplayTransferStart(_bank.GetAccounts(), false);
         BankAccount source = _bank.GetBankAccount(_userInterface.GetSourceAccountIndex());
         String destination = _userInterface.GetExternalAccountNumber();
 
         if (source == null || destination.Length == 0)
         {
-            Console.WriteLine("Source or destination account is invalid, cannot perform a domestic transfer.");
+            _userInterface.DisplayIncorrectAccountsError();
             return;
         }
 
-        string transferTitle = ("Provide transfer title");
-   
-        decimal amount = _userInterface.GetTransferAmount();
-        // return ("Provide transfer amount");
+        string transferTitle = _userInterface.GetTransferTitle();
+        decimal transferamount = _userInterface.GetTransferAmount();
 
-        if (amount <= 0)
+        if (transferamount <= 0)
         {
-            Console.WriteLine("$0 or less cannot be transferred");
+            _userInterface.Display0OrLessTransferAmountError();
             return;
         }
 
-        if (amount > source.AccountBalance)
+        if (transferamount > source.AccountBalance)
         {
-            Console.WriteLine("Amount greater than source account balance cannot be transferred");
+            _userInterface.DisplayGreaterThanSourceBalanceError();
             return;
         }
 
@@ -184,28 +137,30 @@ namespace BankTransfers
         transfer.PerformOutgoingTransfer(
             source,
             destination,
-            amount,
+            transferamount,
             transferTitle,
             DateTime.Now);
 
-        Console.WriteLine("Transfer is successful");
-        Console.WriteLine(transfer.ToString());
+        _bank.RegisterTransfer(transfer);
+        _userInterface.DisplayTransferSummary(transfer);
+
     }
 
     private void ListAccountsBalance()
     {
-        Console.WriteLine("Accounts balance");
-      //  DisplayAccountsBalance(_bank.GetAccount());
+        _userInterface.DisplayAccountsBalanceStart();
+        _userInterface.DisplayAccountsBalance(_bank.GetAccounts());
     }
-    public void DisplayAccountsBalance(List<BankAccount> accounts)
+
+    private void ListTransfers()
     {
-        if (accounts.Count == 0)
-        {
-            Console.WriteLine("No accounts has been created");
-        }
-        foreach (var bankaccount in accounts)
-        {
-            Console.WriteLine($"Name: {bankaccount.Name}, Guid: {bankaccount.AccountNumber.ToString()}, Balance: ${bankaccount.AccountBalance}");
-        }
+        _userInterface.DisplayTransferListStart();
+        _userInterface.DisplayTransfers(_bank.GetTransfers());
+    }
+
+    public static void Main(string[] args)
+    {
+        var program = new Program();
+        program.Run();
     }
 }

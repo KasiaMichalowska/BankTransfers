@@ -8,17 +8,12 @@ namespace BankTransfers
         private void WritePrompt(string prompt)
         {
             Console.Write($"\n---- {prompt}: ");
-        }
+        }      
 
-        private void WriteLine(string line)
-        {
-            Console.WriteLine($"  {line}");
-        }
-
-        private void WriteError(string error)
-        {
-            Console.WriteLine($"\n{error}\n");
-        }
+        //private void WriteError(string error)
+        //{
+        //    Console.WriteLine($"\n{error}\n");
+        //}
 
         private int ReadIntegerValue(string prompt)
         {
@@ -26,7 +21,7 @@ namespace BankTransfers
             WritePrompt(prompt);
             while (!int.TryParse(Console.ReadLine(), out userChoice))
             {
-                WriteError("Incorrect option - try again...");
+                Console.Write("Incorrect option - try again...");
                 WritePrompt(prompt);
             }
 
@@ -39,7 +34,7 @@ namespace BankTransfers
             WritePrompt(prompt);
             while (!decimal.TryParse(Console.ReadLine(), out userValue))
             {
-                WriteError("Incorrect decimal value - try again...");
+                Console.Write("Incorrect decimal value - try again...");
                 WritePrompt(prompt);
             }
 
@@ -54,7 +49,7 @@ namespace BankTransfers
             {
                 while (userValue != null && userValue.Trim().Length == 0)
                 {
-                    WriteError("Provided value cannot be empty");
+                    Console.Write("Provided value cannot be empty");
                     WritePrompt(prompt);
                 }
             }
@@ -76,20 +71,12 @@ namespace BankTransfers
 
         public int ReadMenu()
         {
-            Console.WriteLine(" Choose option");
-            int userChoice;
-
-            while (!int.TryParse(Console.ReadLine(), out userChoice))
-            {
-                Console.WriteLine("Incorrect option - try again...");
-            }
-            return userChoice;
+            return ReadIntegerValue("Choose option");
         }
 
         public void DisplayCreateAccountInfo()
         {
-          //  Console.WriteLine(" Creating new account");
-            Console.WriteLine(" Provide account name: ");
+            Console.WriteLine("Creating new account");
         }
 
         public void DisplayAccountInfo(BankAccount account)
@@ -99,7 +86,7 @@ namespace BankTransfers
 
         public string GetAccountName()
         {
-            return Console.ReadLine();
+            return ReadStringValue("Provide account name", false);
         }
 
         public void DisplayTransferStart(List<BankAccount> accounts, bool isDomestic)
@@ -139,7 +126,17 @@ namespace BankTransfers
         {
             return ReadStringValue("Provide destination (external) bank account number");
         }
-                
+
+        public String GetTransferTitle()
+        {
+            return ReadStringValue("Provide transfer title");
+        }
+
+        public decimal GetTransferAmount()
+        {
+            return ReadDecimalValue("Provide transfer amount");
+        }
+
         public void DisplayLessThan2AccountsDomesticError()
         {
             Console.WriteLine("There are less than 2 domestic accounts, cannot do a transfer");
@@ -150,9 +147,59 @@ namespace BankTransfers
             Console.WriteLine("To do a transfer there has to be at least 1 domestic account");
         }
 
+        public void DisplayIncorrectAccountsError()
+        {
+            Console.WriteLine("Source or destination account is invalid, cannot do a transfer");
+        }
+
         public void DisplayTransferToTheSameAccountDomesticError()
         {
             Console.WriteLine("Source and destination account is the same, cannot do a transfer");
+        }
+
+        public void Display0OrLessTransferAmountError()
+        {
+            Console.WriteLine("$0 or less cannot be transferred");
+        }
+        public void DisplayGreaterThanSourceBalanceError()
+        {
+            Console.WriteLine("Amount greater than source account balance cannot be transferred");
+        }
+
+        public void DisplayAccountsBalanceStart()
+        {
+            Console.WriteLine("Accounts balance");
+        }
+
+        public void DisplayAccountsBalance(List<BankAccount> accounts)
+        {
+            if (accounts.Count == 0)
+            {
+                Console.WriteLine("No accounts has been created");
+            }
+            foreach (var account in accounts)
+            {
+                Console.WriteLine($"Name: {account.Name}, Guid: {account.AccountNumber.ToString()}, Balance: ${account.Balance}");
+            }
+        }
+        public void DisplayTransferListStart()
+        {
+            Console.WriteLine("Transfer history");
+        }
+
+        public void DisplayTransfers(List<Transfer> transfers)
+        {
+            if (transfers.Count == 0)
+            {
+                Console.WriteLine("No transfers has been sent");
+            }
+            else
+            {
+                foreach (var transfer in transfers)
+                {
+                    Console.WriteLine(transfer.ToString());
+                }
+            }
         }
     }
 }
