@@ -5,19 +5,19 @@ namespace BankTransfers
 {
     public class UserInterface
     {
-        //private void WritePrompt(string prompt)
-        //{
-        //    Console.Write($"\n {prompt}: ");
-        //}
+        private void WritePrompt(string prompt)
+        {
+            Console.Write($"\n {prompt}: ");
+        }
 
         private int ReadIntegerValue(string prompt)
         {
             int userChoice;
-            //WritePrompt(prompt);
+            WritePrompt(prompt);
             while (!int.TryParse(Console.ReadLine(), out userChoice))
             {
                 Console.Write("Incorrect option - try again...");
-           //     WritePrompt(prompt);
+                WritePrompt(prompt);
             }
 
             return userChoice;
@@ -26,11 +26,11 @@ namespace BankTransfers
         private decimal ReadDecimalValue(string prompt)
         {
             decimal userValue;
-          //  WritePrompt(prompt);
+            WritePrompt(prompt);
             while (!decimal.TryParse(Console.ReadLine(), out userValue))
             {
                 Console.Write("Incorrect decimal value - try again...");
-           //     WritePrompt(prompt);
+                WritePrompt(prompt);
             }
 
             return userValue;
@@ -38,14 +38,14 @@ namespace BankTransfers
 
         private string ReadStringValue(string prompt, bool allowEmpty = true)
         {
-          //  WritePrompt(prompt);
+            WritePrompt(prompt);
             var userValue = Console.ReadLine();
             if (!allowEmpty)
             {
                 while (userValue != null && userValue.Trim().Length == 0)
                 {
                     Console.Write("Provided value cannot be empty");
-               //     WritePrompt(prompt);
+                    WritePrompt(prompt);
                 }
             }
 
