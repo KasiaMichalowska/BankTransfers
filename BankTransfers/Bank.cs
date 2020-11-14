@@ -21,7 +21,7 @@ namespace BankTransfers
             return newAccount;
         }
 
-        public List<BankAccount> GetAccount()
+        public List<BankAccount> GetAccounts()
         {
             return _accounts;
         }
